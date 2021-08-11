@@ -1,0 +1,16 @@
+[app/ui]
+version = 8.2.0
+modtime = 1628691764.698135500
+
+[app/launcher]
+version = 8.2.0
+modtime = 1628691764.705674500
+
+[views/compatibility_status]
+owner = admin
+version = 8.2.0
+modtime = 1628721339.494378100
+
+[views/app_compatibility_status]
+version = 8.2.0
+modtime = 1628723949.744869200

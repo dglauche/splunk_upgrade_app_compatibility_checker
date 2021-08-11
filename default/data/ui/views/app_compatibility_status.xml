@@ -1,0 +1,59 @@
+<form>
+  <label>App Compatibility Status</label>
+  <description>This dashboard provides an overview of the upgrade readiness of your apps</description>
+  <search id="basesearch">
+    <query>| rest /services/apps/local | search title=$title_filter$ | checkappcompatibility target_version=$target_version$</query>
+    <earliest>-24h@h</earliest>
+    <latest>now</latest>
+  </search>
+  <fieldset submitButton="true" autoRun="false">
+    <input type="dropdown" token="target_version">
+      <label>Targeted Splunk Version</label>
+      <fieldForLabel>version</fieldForLabel>
+      <fieldForValue>version</fieldForValue>
+      <search>
+        <query>| getsplunkversions</query>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </search>
+    </input>
+    <input type="text" token="title_filter">
+      <label>Title filter</label>
+      <default>*</default>
+      <initialValue>*</initialValue>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <chart>
+        <search base="basesearch">
+          <query>| stats count by already_compatible</query>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.fieldColors">{"yes": 0x008f01, "undecided":0xffdf01, "no": 0xfe0000}</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Depending on the number of installed apps this could take a while so be patient!</title>
+        <search base="basesearch">
+          <query>| rename version AS "installed version" | table  title, author, "installed version", status, already_compatible</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+        <small>
+          <a href="https://iconscout.com/icons/system-update" target="_blank">System Update Line Icon</a> on <a href="https://iconscout.com">Iconscout</a>
+        </small>
+      </html>
+    </panel>
+  </row>
+</form>

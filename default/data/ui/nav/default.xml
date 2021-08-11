@@ -1,0 +1,11 @@
+<nav search_view="search">
+  <view name="app_compatibility_status" default='true' />
+  <collection label="Others">
+    <view name="search" default='true' />
+    <view name="analytics_workspace" />
+    <view name="datasets" />
+    <view name="reports" />
+    <view name="alerts" />
+    <view name="dashboards" />
+  </collection>
+</nav>
