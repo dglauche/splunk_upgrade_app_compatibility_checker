@@ -28,6 +28,9 @@ There are three options to use the app.
   target splunk version.
 * Obviously there a couple of apps which are not listed within the splunkbase so they cannot be checked. They will marked
   as "undecided" (see belows screenshot).
-  
+* This app is by no means a substitution of Splunk's python upgrade readiness [app](https://splunkbase.splunk.com/app/5483/)
+  as it does not analyze any code. It simply reach out to splunkbase to check compatibility information listed there.
+* You technically could check deployment apps but the REST API call mentioned does only contain apps installed locally.
+
 ## How does it look?
 ![screenshot](./static/screenshot.jpg)

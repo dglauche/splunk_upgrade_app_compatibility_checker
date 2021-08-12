@@ -1,7 +1,9 @@
+#!/usr/bin/env python3
+
 import os
+import re
 import sys
 import time
-import re
 import urllib.request
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "lib"))
