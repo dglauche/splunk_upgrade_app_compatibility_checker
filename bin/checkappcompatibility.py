@@ -41,7 +41,7 @@ class CheckAppCompatibilityCommand(StreamingCommand):
                 continue
 
             # if no update page is available we have to resolve the app id via splunk's REST API
-            if not check_key('update.homepage', record):
+            if not check_key('update.homepage', record) and check_key('title', record):
                 uri = f"https://apps.splunk.com/apps/id/{record['title']}"
                 try:
                     rdr = urllib.request.urlopen(uri)
