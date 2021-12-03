@@ -1,13 +1,16 @@
 <form>
   <label>App Compatibility Status</label>
   <description>This dashboard provides an overview of the upgrade readiness of your apps</description>
+  <init>
+    <set token="tok_cloud_comp">false</set>
+  </init>
   <search id="basesearch">
-    <query>| rest /services/apps/local | search title=$title_filter$ | checkappcompatibility target_version=$target_version$</query>
+    <query>| rest /services/apps/local | search title=$tok_title_filter$ | checkappcompatibility target_version=$tok_target_version$ cloud_compatibility_required=$tok_cloud_comp$</query>
     <earliest>-24h@h</earliest>
     <latest>now</latest>
   </search>
   <fieldset submitButton="true" autoRun="false">
-    <input type="dropdown" token="target_version">
+    <input type="dropdown" token="tok_target_version" searchWhenChanged="true">
       <label>Targeted Splunk Version</label>
       <fieldForLabel>version</fieldForLabel>
       <fieldForValue>version</fieldForValue>
@@ -17,10 +20,22 @@
         <latest>now</latest>
       </search>
     </input>
-    <input type="text" token="title_filter">
+    <input type="text" token="tok_title_filter">
       <label>Title filter</label>
       <default>*</default>
       <initialValue>*</initialValue>
+    </input>
+    <input type="checkbox" searchWhenChanged="true">
+      <label>Splunk Cloud compatibility</label>
+      <choice value="yes">yes</choice>
+      <change>
+        <condition value="yes">
+          <set token="tok_cloud_comp">true</set>
+        </condition>
+        <condition>
+          <set token="tok_cloud_comp">false</set>
+        </condition>
+      </change>
     </input>
   </fieldset>
   <row>
