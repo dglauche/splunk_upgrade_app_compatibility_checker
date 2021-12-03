@@ -21,8 +21,6 @@ There are three options to use the app.
  
 
 ## Are there limitations?
-* If you have a bunch of apps to check, splunk might auto finalize your search. To get around this split your dataset
-  into multiple parts/searches.
 * Sometimes splunkbase does not list multiple versions of an app. If your version is not listed, the compatibility
   can't be checked. The checker will therefore recommend to update to the most recent app version which supports your
   target splunk version.
