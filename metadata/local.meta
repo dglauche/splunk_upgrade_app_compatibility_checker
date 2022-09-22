@@ -12,5 +12,9 @@ version = 8.2.0
 modtime = 1628721339.494378100
 
 [views/app_compatibility_status]
-version = 8.2.0
-modtime = 1628723949.744869200
+version = 8.2.4
+modtime = 1663809385.112390000
+
+[app/install/install_source_checksum]
+version = 8.2.4
+modtime = 1650533080.564595000

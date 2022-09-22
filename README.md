@@ -22,8 +22,7 @@ There are three options to use the app.
 
 ## Are there limitations?
 * Sometimes splunkbase does not list multiple versions of an app. If your version is not listed, the compatibility
-  can't be checked. The checker will therefore recommend to update to the most recent app version which supports your
-  target splunk version.
+  can't be checked. I'm assuming that if an existing older version is already compatible with your target version, your version is too.
 * Obviously there a couple of apps which are not listed within the splunkbase so they cannot be checked. They will marked
   as "undecided" (see belows screenshot).
 * This app is by no means a substitution of Splunk's python upgrade readiness [app](https://splunkbase.splunk.com/app/5483/)

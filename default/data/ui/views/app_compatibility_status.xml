@@ -3,11 +3,23 @@
   <description>This dashboard provides an overview of the upgrade readiness of your apps</description>
   <init>
     <set token="tok_cloud_comp">false</set>
+    <set token="tok_base_app_comp">false</set>
+    <set token="loading_warning">☕ Be patient, the complete splunkbase app catalog is being downloaded!</set>
+    <unset token="has_premium_apps"></unset>
   </init>
   <search id="basesearch">
-    <query>| rest /services/apps/local | search title=$tok_title_filter$ | checkappcompatibility target_version=$tok_target_version$ cloud_compatibility_required=$tok_cloud_comp$</query>
+    <query>| rest /services/apps/local | checkappcompatibility target_version=$tok_target_version$ cloud_compatibility_required=$tok_cloud_comp$ threat_baseapp_as_compatible=$tok_base_app_comp$ | eventstats values(eval(is_premium_app="1")) as has_premium_apps</query>
     <earliest>-24h@h</earliest>
     <latest>now</latest>
+    <done>
+      <condition match="$result.has_premium_apps$==&quot;1&quot;">
+        <set token="has_premium_apps">1</set>
+        <set token="loading_warning"></set>
+      </condition>
+      <condition>
+        <set token="loading_warning"></set>
+      </condition>
+    </done>
   </search>
   <fieldset submitButton="true" autoRun="false">
     <input type="dropdown" token="tok_target_version" searchWhenChanged="true">
@@ -21,7 +33,12 @@
       </search>
     </input>
     <input type="text" token="tok_title_filter">
-      <label>Title filter</label>
+      <label>App title filter</label>
+      <default>*</default>
+      <initialValue>*</initialValue>
+    </input>
+    <input type="text" token="tok_appname_filter">
+      <label>App name filter</label>
       <default>*</default>
       <initialValue>*</initialValue>
     </input>
@@ -37,12 +54,32 @@
         </condition>
       </change>
     </input>
+    <input type="checkbox" searchWhenChanged="true">
+      <label>Treat baseapps as compatible</label>
+      <choice value="yes">yes</choice>
+      <change>
+        <condition value="yes">
+          <set token="tok_base_app_comp">true</set>
+        </condition>
+        <condition>
+          <set token="tok_base_app_comp">false</set>
+        </condition>
+      </change>
+    </input>
   </fieldset>
+  <row depends="$has_premium_apps$">
+    <panel>
+      <html>
+        <div>☝ Parsing of premium app compatibility isn't that easy. You should double-check your compatibility <a href="https://docs.splunk.com/Documentation/VersionCompatibility/current/Matrix/CompatMatrix">here</a>
+        </div>
+      </html>
+    </panel>
+  </row>
   <row>
     <panel>
       <chart>
         <search base="basesearch">
-          <query>| stats count by already_compatible</query>
+          <query>| search title="$tok_appname_filter$" label="$tok_title_filter$" | stats count by already_compatible</query>
         </search>
         <option name="charting.chart">pie</option>
         <option name="charting.drilldown">none</option>
@@ -53,12 +90,11 @@
   <row>
     <panel>
       <table>
-        <title>Depending on the number of installed apps this could take a while so be patient!</title>
+        <title>$loading_warning$</title>
         <search base="basesearch">
-          <query>| rename version AS "installed version" | table  title, author, "installed version", status, already_compatible</query>
+          <query>| search title="$tok_appname_filter$" label="$tok_title_filter$" | rename version AS "installed version" | table  title, author, "installed version", status, already_compatible</query>
         </search>
         <option name="drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
       </table>
     </panel>
   </row>
